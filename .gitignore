@@ -1,0 +1,7 @@
+*.stat
+*.dproj.local
+*.groupproj.local
+*.todo
+*.exe
+__history/**
+__recovery/**

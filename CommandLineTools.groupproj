@@ -1,0 +1,84 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{B5A33941-01DF-4301-B657-0D0BA886C1A8}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="exact.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="echoc.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="slack.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="cal.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="whereis.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="exact">
+        <MSBuild Projects="exact.dproj"/>
+    </Target>
+    <Target Name="exact:Clean">
+        <MSBuild Projects="exact.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="exact:Make">
+        <MSBuild Projects="exact.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="echoc">
+        <MSBuild Projects="echoc.dproj"/>
+    </Target>
+    <Target Name="echoc:Clean">
+        <MSBuild Projects="echoc.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="echoc:Make">
+        <MSBuild Projects="echoc.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="slack">
+        <MSBuild Projects="slack.dproj"/>
+    </Target>
+    <Target Name="slack:Clean">
+        <MSBuild Projects="slack.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="slack:Make">
+        <MSBuild Projects="slack.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="cal">
+        <MSBuild Projects="cal.dproj"/>
+    </Target>
+    <Target Name="cal:Clean">
+        <MSBuild Projects="cal.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="cal:Make">
+        <MSBuild Projects="cal.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="whereis">
+        <MSBuild Projects="whereis.dproj"/>
+    </Target>
+    <Target Name="whereis:Clean">
+        <MSBuild Projects="whereis.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="whereis:Make">
+        <MSBuild Projects="whereis.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="exact;echoc;slack;cal;whereis"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="exact:Clean;echoc:Clean;slack:Clean;cal:Clean;whereis:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="exact:Make;echoc:Make;slack:Make;cal:Make;whereis:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
