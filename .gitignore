@@ -3,5 +3,7 @@
 *.groupproj.local
 *.todo
 *.exe
+*.dsk
+*.identcache
 __history/**
 __recovery/**
