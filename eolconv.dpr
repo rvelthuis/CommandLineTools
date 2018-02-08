@@ -42,7 +42,7 @@ program eolconv;
 
 uses
 {$IFDEF DEBUG}
-  Velthuis.AutoConsole,
+  Velthuis.AutoConsole, // Can be omitted, see http://rvelthuis.de/programs/autoconsole.html
 {$ENDIF }
   Winapi.Windows,
   System.SysUtils,
