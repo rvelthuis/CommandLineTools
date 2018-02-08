@@ -7,3 +7,7 @@
 *.identcache
 __history/**
 __recovery/**
+Win32/**
+Win64/**
+*.~dsk
+*.tvsconfig
