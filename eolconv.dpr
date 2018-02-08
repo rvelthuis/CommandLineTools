@@ -2,9 +2,9 @@
 { File:       eolconv.dpr                                                   }
 { Function:   Command line tool that converts all line endings of a text    }
 {             file to a specified style or to the default.                  }
-{ Language:   Delphi for Win32                                              }
+{ Language:   Delphi                                                        }
 { Author:     Rudy Velthuis                                                 }
-{ Copyright:  (c) 2005 Rudy Velthuis                                        }
+{ Copyright:  (c) 2018 Rudy Velthuis                                        }
 {                                                                           }
 { License and disclaimer:                                                   }
 {                                                                           }
