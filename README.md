@@ -11,7 +11,7 @@ some of them with you.
   <dd>A simple tool to display a string in different colours.</dd>
   <dt>eolconv</dt>
   <dd>A tool that converts all line endings of a text file to a specified style or to the default for the platform.</dd>
-  <dt>exact</dt><
+  <dt>exact</dt>
   <dd>A tool to show the exact values of floating point variables in single, double and extended precision and in hex.</dd>
   <dt>slack</dt>
   <dd>A tool which calculates the disk space wasted, because of cluster size, on the files in a certain directory.</dd>
