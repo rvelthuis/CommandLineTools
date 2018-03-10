@@ -21,9 +21,14 @@ var
   CurByte: Byte;
   LLen: Integer;
   InBuffer, OutBuffer: TArray<Byte>;
+  Size: Integer;
 begin
-  SetLength(InBuffer, 1024 * 1024);
-  SetLength(OutBuffer, 2 * Length(InBuffer));
+  if InStream.Size > 1024 * 1024 then
+    Size := 1024 * 1024
+  else
+    Size := InStream.Size;
+  SetLength(InBuffer, Size);
+  SetLength(OutBuffer, 2 * Size);
   repeat
     LLen := InStream.Read(InBuffer[0], Length(InBuffer));
     if LLen = 0 then
@@ -58,7 +63,7 @@ begin
       end;
     end;
     OutStream.Write(OutBuffer, POut - PByte(OutBuffer));
-  until LLen < Length(InBuffer);
+  until LLen < Size;
 end;
 
 {$POINTERMATH ON}
@@ -69,11 +74,16 @@ var
   CurChar: Word;
   LLen: Integer;
   InBuffer, OutBuffer: TArray<Word>;
+  Size: Integer;
 begin
-  SetLength(InBuffer, 1024 * 1024);
-  SetLength(OutBuffer, 2 * Length(InBuffer));
+  if InStream.Size > (1024 * 1024) * SizeOf(Char) then
+    Size := 1024 * 1024
+  else
+    Size := InStream.Size div SizeOf(Char);
+  SetLength(InBuffer, Size);
+  SetLength(OutBuffer, 2 * Size);
   repeat
-    LLen := InStream.Read(InBuffer[0], Length(InBuffer) * SizeOf(Char));
+    LLen := InStream.Read(InBuffer[0], Size * SizeOf(Char));
     if LLen = 0 then
       Break;
 
@@ -106,7 +116,7 @@ begin
       end;
     end;
     OutStream.Write(OutBuffer[0], (POut - PWord(OutBuffer)) * SizeOf(Char));
-  until LLen < Length(InBuffer) * SizeOf(Char);
+  until LLen < Size * SizeOf(Char);
 end;
 
 procedure Convert16LE(const InStream, OutStream: TStream; LineBreaks: TTextLineBreakStyle);
@@ -115,11 +125,16 @@ var
   CurChar: Word;
   LLen: Integer;
   InBuffer, OutBuffer: TArray<Word>;
+  Size: Integer;
 begin
-  SetLength(InBuffer, 1024 * 1024);
-  SetLength(OutBuffer, 2 * Length(InBuffer));
+  if InStream.Size > (1024 * 1024) * SizeOf(Char) then
+    Size := 1024 * 1024
+  else
+    Size := InStream.Size div SizeOf(Char);
+  SetLength(InBuffer, Size);
+  SetLength(OutBuffer, 2 * Size);
   repeat
-    LLen := InStream.Read(InBuffer[0], Length(InBuffer) * SizeOf(Char));
+    LLen := InStream.Read(InBuffer[0], Size * SizeOf(Char));
     if LLen = 0 then
       Break;
 
@@ -152,7 +167,7 @@ begin
       end;
     end;
     OutStream.Write(OutBuffer[0], (POut - PWord(@OutBuffer[0])) * SizeOf(Char));
-  until LLen < Length(InBuffer) * SizeOf(Char);
+  until LLen < Size * SizeOf(Char);
 end;
 
 function ConvertFile(const InFileName, OutFileName: string; LineBreaks: TTextLineBreakStyle): Boolean;
