@@ -30,7 +30,7 @@ begin
   SetLength(InBuffer, Size);
   SetLength(OutBuffer, 2 * Size);
   repeat
-    LLen := InStream.Read(InBuffer[0], Length(InBuffer));
+    LLen := InStream.Read(InBuffer[0], Size);
     if LLen = 0 then
       Break;
 
