@@ -41,12 +41,14 @@ program eolconv;
 {$R *.res}
 
 uses
-{$IFDEF DEBUG}
-  Velthuis.AutoConsole, // Can be omitted, see http://rvelthuis.de/programs/autoconsole.html
-{$ENDIF }
+  {$IFDEF DEBUG}
+  // Can be removed, see http://rvelthuis.de/programs/autoconsole.html
+  Velthuis.AutoConsole,
+  {$ENDIF }
   Winapi.Windows,
   System.SysUtils,
-  System.Classes;
+  System.Classes,
+  EOLConv.Converters in 'EOLConv.Converters.pas';
 
 const
 {$IFDEF MSWINDOWS}
@@ -58,7 +60,7 @@ const
 resourcestring
   SCouldNotOpenFile    = 'Could not open file ''%s''';
   SCouldNotWriteBackup = 'Could not write backup file for ''%s''';
-  SHelpDesc            = 'EOLCONV: Convert line ends of text file.' + NL;
+  SHelpDescription     = 'EOLCONV: Convert line ends of text file.' + NL;
   SHelp                =
     'Syntax: EOLCONV [options ...] Names[s]' + NL + NL +
     'Options start with %s' + NL +
@@ -73,48 +75,40 @@ end;
 
 function ProcessFile(const FileName: string; LineEndType: TTextLineBreakStyle): Boolean;
 var
-  LList: TStringList;
   I: Integer;
+  BackupName: string;
 begin
   Result := True;
-  LList := TStringList.Create;
-  try
-    // Check if file exists.
-    if not FileExists(FileName) then
-    begin
-      Message(SCouldNotOpenFile, [FileName]);
-      Exit(False);
-    end;
+  // Check if file exists.
+  if not FileExists(FileName) then
+  begin
+    Message(SCouldNotOpenFile, [FileName]);
+    Exit(False);
+  end;
 
-    // Load from file. Recognizes encoding and cuts up at line breaks.
-    LList.LoadFromFile(FileName);
+  // Write backup file: fn+'.~1', fn+'.~2' etc. up to fn+'.~200'.
+  I := 1;
+  while FileExists(FileName + '.~' + IntToStr(I)) and (I < 200) do
+    Inc(I);
+  if I >= 200 then
+  begin
+    Message(SCouldNotWriteBackup, [FileName]);
+    Exit(False);
+  end
+  else
+    BackupName := FileName + '.~' + IntToStr(I);
 
-    // Set desied output line break.
-    case LineEndType of
-      tlbsLF: LList.LineBreak := #10;
-      tlbsCRLF: LList.LineBreak := #13#10;
-    end;
-
-    // Write backup file: fn+'.~1', fn+'.~2' etc. up to fn+'.~200'.
-    I := 1;
-    while not RenameFile(FileName, FileName + '.~' + IntToStr(I)) and (I < 200) do
-      Inc(I);
-    if I <= 200 then
-      LList.SaveToFile(FileName)
-    else
-    begin
-      Message(SCouldNotWriteBackup, [FileName]);
-      Exit(False);
-    end;
-  finally
-    LList.Free;
+  if ConvertFile(FileName, FileName + '.out', LineEndType) then
+  begin
+    RenameFile(FileName, BackupName);
+    RenameFile(FileName + '.out', FileName);
   end;
 end;
 
 procedure Help(Description: Boolean);
 begin
   if Description then
-    Writeln(SHelpDesc);
+    Writeln(SHelpDescription);
 {$IFDEF MSWINDOWS}
   Message(SHelp, ['- or /', ' (default)', '']);
 {$ELSE}
