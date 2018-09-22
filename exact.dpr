@@ -123,6 +123,52 @@ begin
   end;
 end;
 
+function TrimZeroes(const S: string): string;
+var
+  I: Integer;
+begin
+  I := Length(S);
+  while S[I] = '0' do
+    Dec(I);
+  if I <= 0 then
+    Result := '0'
+  else
+    Result := Copy(S, 1, I);
+end;
+
+function SignedStr(I: Integer): string;
+begin
+  if I >= 0 then
+    Result := '+' + IntToStr(I)
+  else
+    Result := IntToStr(I);
+end;
+
+function DoubleToHex(D: Double): string;
+begin
+  case D.SpecialType of
+    fsZero:
+      Result := '0x0.0p+0';
+    fsNZero:
+      Result := '-0x0.0p+0';
+    fsDenormal:
+      Result := Format('0x0.%sp-1026', [TrimZeroes(Format('%.13X', [D.Mantissa and $FFFFFFFFFFFFF]))]);
+    fsNDenormal:
+      Result := Format('-0x0.%sp-1026', [TrimZeroes(Format('%.13X', [D.Mantissa and $FFFFFFFFFFFFF]))]);
+    fsPositive:
+      Result := Format('0x1.%sp%s', [TrimZeroes(Format('%.13X', [D.Mantissa and $FFFFFFFFFFFFF])), SignedStr(D.Exponent)]);
+    fsNegative:
+      Result := Format('-0x1.%sp%s', [TrimZeroes(Format('%.13X', [D.Mantissa and $FFFFFFFFFFFFF])), SignedStr(D.Exponent)]);
+    fsInf:
+      Result := '+Infinity';
+    fsNInf:
+      Result := '-Infinity';
+    fsNaN:
+      Result := 'NaN';
+  end;
+end;
+
+
 procedure HexValue(const S: string);
 var
   BD: BigDecimal;
@@ -139,7 +185,7 @@ begin
     Writeln('Hex Value: ', BI.ToString(16));
     Writeln;
     Writeln('32 bit float: ', SingleString(Sgl));
-    Writeln('64 bit float: ', DoubleString(Dbl));
+    Writeln('64 bit float: ', DoubleString(Dbl), ' (', DoubleToHex(Dbl), ')');
     Writeln('80 bit float: ', ExtendedString(Ext));
     Writeln;
   end
@@ -172,7 +218,7 @@ begin
   // Double
   Dbl := Double(B);
   Writeln('64 bit float: ', DoubleString(Dbl));
-  Writeln(Format('Hex:          %.16X', [PUInt64(@Dbl)^]));
+  Writeln(Format('Hex:          %.16X (%s)', [PUInt64(@Dbl)^, DoubleToHex(Dbl)]));
   Writeln;
 
 {$IF SizeOf(Extended) > SizeOf(Double)}
