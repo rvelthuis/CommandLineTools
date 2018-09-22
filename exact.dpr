@@ -152,9 +152,9 @@ begin
     fsNZero:
       Result := '-0x0.0p+0';
     fsDenormal:
-      Result := Format('0x0.%sp-1026', [TrimZeroes(Format('%.13X', [D.Mantissa and $FFFFFFFFFFFFF]))]);
+      Result := Format('0x0.%sp-1022', [TrimZeroes(Format('%.13X', [D.Mantissa and $FFFFFFFFFFFFF]))]);
     fsNDenormal:
-      Result := Format('-0x0.%sp-1026', [TrimZeroes(Format('%.13X', [D.Mantissa and $FFFFFFFFFFFFF]))]);
+      Result := Format('-0x0.%sp-1022', [TrimZeroes(Format('%.13X', [D.Mantissa and $FFFFFFFFFFFFF]))]);
     fsPositive:
       Result := Format('0x1.%sp%s', [TrimZeroes(Format('%.13X', [D.Mantissa and $FFFFFFFFFFFFF])), SignedStr(D.Exponent)]);
     fsNegative:
